@@ -26,7 +26,7 @@ class Config:
     MAX_FILE_SIZE_MB = 100
 
     @classmethod # what does a class method do?
-    def get_processing_config(cls) -> Dict[str, Any]:
+    def get_doc_processing_config(cls) -> Dict[str, Any]:
         return {
             'chunk_size': int(os.getenv('CHUNK_SIZE', cls.DEFAULT_CHUNK_SIZE)),
             'chunk_overlap': int(os.getenv('CHUNK_OVERLAP', cls.DEFAULT_CHUNK_OVERLAP)),
@@ -65,7 +65,7 @@ class Config:
     @classmethod
     def get_all_configs(cls) -> Dict[str, Any]:
         return {
-            'document_processing': cls.get_processing_config(),
+            'document_processing': cls.get_doc_processing_config(),
             'embedding': cls.get_embedding_config(),
             'vector_store': cls.get_vector_store_config(),
             'llm': cls.get_llm_config(),
