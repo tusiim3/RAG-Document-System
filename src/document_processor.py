@@ -56,25 +56,4 @@ class DocumentProcessor:
             logger.error(f"Error processing document: {e}")
             raise e
         
-    def get_document_stats(self, chunks: List[Document]) -> dict:
-        if not chunks:
-            return {
-                'total_chunks': 0,
-                'total_characters': 0,
-                'avg_chunk_size': 0,
-                'min_chunk_size': 0,
-                'max_chunk_size': 0
-            }
-        
-        chunk_sizes = [len(chunk.page_content) for chunk in chunks]
-        total_chars = sum(chunk_sizes)
-
-        return {
-            'total_chunks': len(chunks),
-            'total_characters': total_chars,
-            'avg_chunk_size': total_chars / len(chunks),
-            'min_chunk_size': min(chunk_sizes),
-            'max_chunk_size': max(chunk_sizes)
-        }
-
-        
+   
