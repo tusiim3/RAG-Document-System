@@ -1,8 +1,8 @@
 import logging
 from typing import List, Optional
 from langchain.text_splitter import RecursiveCharacterTextSplitter
-from langchain.document_loaders import TextLoader
-from langchain.schema import Document
+from langchain_community.document_loaders.text import TextLoader
+from langchain_core.documents import Document
 
 from .config import Config
 

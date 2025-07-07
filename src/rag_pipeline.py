@@ -3,7 +3,7 @@ import os
 from typing import List, Optional, Tuple
 from langchain_openai import ChatOpenAI
 from langchain.chains import RetrievalQA
-from langchain.schema import Document
+from langchain_core.documents import Document
 
 from .document_processor import DocumentProcessor
 from .embedding_manager import EmbeddingManager
