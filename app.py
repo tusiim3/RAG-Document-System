@@ -3,15 +3,13 @@ import os
 import tempfile
 import logging
 from dotenv import load_dotenv
-
-import streamlit as st
-import os
-import dotenv
 import uuid
+
+# UI Components moved to src/ui_components.py for easier maintenance
 
 from langchain_openai import ChatOpenAI
 from langchain.schema import HumanMessage, AIMessage
-from rag_methods import stream_llm_response, stream_llm_rag_response, load_doc_to_db
+#from rag_methods import stream_llm_response, stream_llm_rag_response, load_doc_to_db
 
 dotenv.load_dotenv()
 
@@ -28,7 +26,7 @@ st.set_page_config(
 )
 
 # --- Header ---
-st.html("""<h2 style="text-align: center;">📚🔍 <i> Do your LLM even RAG bro? </i> 🤖💬</h2>""")
+st.html("""<h2 style="text-align: center;">📚🔍 <i> Intelligent Document Query System </i> 🤖💬</h2>""")
 
 
 # --- Initial Setup ---
