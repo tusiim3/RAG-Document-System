@@ -1,12 +1,13 @@
 import logging
 from typing import List, Optional
-from langchain_openai import OpenAIEmbeddings
+#from langchain_openai import OpenAIEmbeddings
 from langchain_core.documents import Document
+from langchain_huggingface import HuggingFaceEmbeddings
 
 logger = logging.getLogger(__name__)
 
 class EmbeddingManager:
-    def __init__(self, model_name: str = "text-embedding-3-small"):
+    def __init__(self, model_name: str = "sentence-transformers/all-MiniLM-L6-v2"): # text-embedding-3-small
         self.model_name = model_name
         self.embeddings = None
         self._initialize_embeddings()
@@ -14,14 +15,14 @@ class EmbeddingManager:
     def _initialize_embeddings(self):
         try:
             logger.info(f"Initializing embedding model: {self.model_name}")
-            self.embeddings = OpenAIEmbeddings(model=self.model_name)
+            self.embeddings = HuggingFaceEmbeddings(model=self.model_name, model_kwargs={'device': 'cpu'})
             logger.info("Embedding model initialized successfully") 
 
         except Exception as e:
             logger.error(f"Error initializing embedding model: {e}")
             raise e
     
-    def get_embeddings(self) -> OpenAIEmbeddings:
+    def get_embeddings(self) -> HuggingFaceEmbeddings:
         if self.embeddings is None:
             self._initialize_embeddings()
         return self.embeddings

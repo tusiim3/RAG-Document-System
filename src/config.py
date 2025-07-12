@@ -10,7 +10,7 @@ class Config:
     DEFAULT_ENCODING = 'utf-8'
 
     # Embedding Model
-    DEFAULT_EMBEDDING_MODEL = 'text-embedding-3-small' # which other ones are there?
+    DEFAULT_EMBEDDING_MODEL = 'sentence-transformers/all-MiniLM-L6-v2' # which other ones are there?
 
     # Vector Store
     DEFAULT_PERSIST_DIRECTORY = "./chroma_db"

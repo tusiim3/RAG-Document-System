@@ -20,7 +20,7 @@ if not api_key:
     raise ValueError("OPENAI_API_KEY not found in .env file")
 
 class RAGPipeline:
-    def __init__(self, api_key: Optional[str] = None, chunk_size: int = 1000, chunk_overlap: int = 200, embedding_model: str = "text-embedding-3-small", persist_directory: str = "./chroma_db", temperature: float = 0.3):
+    def __init__(self, api_key: Optional[str] = None, chunk_size: int = 1000, chunk_overlap: int = 200, embedding_model: str = "sentence-transformers/all-MiniLM-L6-v2", persist_directory: str = "./chroma_db", temperature: float = 0.3):
         self.api_key = api_key
         self.chunk_size = chunk_size
         self.chunk_overlap = chunk_overlap

@@ -4,10 +4,10 @@ from langchain_core.documents import Document
 
 def setup_page_config():
     st.set_page_config(
-        page_title="Intelligent Document Query System",
+        page_title="RAG Document",
         page_icon="📚",
         layout="centered",
-        initial_sidebar_state="expanded",
+        initial_sidebar_state="collapsed",
     )
 
 def render_header():
