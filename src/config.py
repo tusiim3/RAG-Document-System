@@ -56,8 +56,8 @@ class Config:
     @classmethod
     def get_file_settings(cls) -> Dict[str, Any]:
         return {
-            'supported_types': os.getenv('SUPPORTED_FILES', cls.SUPPORTED_FILE_TYPES),
-            'max_size_mb': os.getenv('MAX_FILE_SIZE_MB', cls.MAX_FILE_SIZE_MB)
+            'supported_types': cls.SUPPORTED_FILE_TYPES,
+            'max_size_mb': int(os.getenv('MAX_FILE_SIZE_MB', cls.MAX_FILE_SIZE_MB))
         }
     
     @classmethod
@@ -80,7 +80,7 @@ class Config:
         return True
     
     @classmethod
-    def get_environment_into(cls) -> Dict[str, Any]:   # why does this matter? could i have done some diff to avoid this?
+    def get_environment_info(cls) -> Dict[str, Any]:   # why does this matter? could i have done some diff to avoid this?
         return {
             'python_version': sys.version,
             'environment_variables': {
