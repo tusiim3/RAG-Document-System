@@ -50,7 +50,7 @@ class Config:
         return {
             'temperature': float(os.getenv('LLM_TEMPERATURE', cls.DEFAULT_TEMPERATURE)),
             'chain_type': os.getenv('LLM_CHAIN_TYPE', cls.DEFAULT_CHAIN_TYPE),
-            'openai_api_key': os.getenv('OPENAI_API_KEY')
+            'api_key': os.getenv('GOOGLE_API_KEY')
         }
     
     @classmethod
@@ -74,7 +74,7 @@ class Config:
     def validate_config(cls) -> bool: #why a boolean?
         llm_config = cls.get_llm_config()
 
-        if not llm_config['openai_api_key']:
+        if not llm_config['api_key']:
             return False
         
         return True
@@ -84,7 +84,7 @@ class Config:
         return {
             'python_version': sys.version,
             'environment_variables': {
-                'OPENAI_API_KEY': 'SET' if os.getenv('OPENAI_API_KEY') else 'NOT SET',
+                'GOOGLE_API_KEY': 'SET' if os.getenv('GOOGLE_API_KEY') else 'NOT SET',
                 'CHUNK_SIZE': os.getenv('CHUNK_SIZE', 'DEFAULT'),
                 'EMBEDDING_MODEL': os.getenv('EMBEDDING_MODEL', 'DEFAULT'),
                 'PERSIST_DIRECTORY': os.getenv('PERSIST_DIRECTORY', 'DEFAULT'),

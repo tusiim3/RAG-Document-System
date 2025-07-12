@@ -2,9 +2,10 @@ import logging
 import os
 from typing import List, Optional, Tuple
 from dotenv import load_dotenv
-from langchain_openai import ChatOpenAI
+from langchain_google_genai import ChatGoogleGenerativeAI
 from langchain.chains import RetrievalQA
 from langchain_core.documents import Document
+import google.generativeai as genai
 
 from .document_processor import DocumentProcessor
 from .embedding_manager import EmbeddingManager
@@ -15,13 +16,13 @@ load_dotenv()
 logger = logging.getLogger(__name__)
 
 # Load API key from .env file
-api_key = os.environ.get("OPENAI_API_KEY")
-if not api_key:
-    raise ValueError("OPENAI_API_KEY not found in .env file")
+google_api_key = os.environ.get("GOOGLE_API_KEY")
+if not google_api_key:
+    raise ValueError("GOOGLE_API_KEY not found in .env file")
 
 class RAGPipeline:
     def __init__(self, api_key: Optional[str] = None, chunk_size: int = 1000, chunk_overlap: int = 200, embedding_model: str = "sentence-transformers/all-MiniLM-L6-v2", persist_directory: str = "./chroma_db", temperature: float = 0.3):
-        self.api_key = api_key
+        self.api_key = api_key 
         self.chunk_size = chunk_size
         self.chunk_overlap = chunk_overlap
         self.embedding_model = embedding_model
@@ -37,11 +38,14 @@ class RAGPipeline:
     def _initialize_components(self):
         try:
             logger.info("Initializing RAG Pipeline components")
+
+            genai.configure(api_key=google_api_key)
+
             self.document_processor = DocumentProcessor(chunk_size=self.chunk_size, chunk_overlap=self.chunk_overlap)
             self.embedding_manager = EmbeddingManager(model_name=self.embedding_model)
             self.vector_store_manager = VectorStoreManager(persist_directory=self.persist_directory, embedding_function=self.embedding_manager.get_embeddings())
             self.vector_store_manager.initialize_vector_store()
-            self.llm = ChatOpenAI(temperature=self.temperature, api_key=self.api_key)
+            self.llm = ChatGoogleGenerativeAI(model="gemini-1.5-flash", temperature=self.temperature)
 
             logger.info("RAG Pipeline components initialized successfully") 
 

@@ -4,7 +4,7 @@ from langchain_core.documents import Document
 
 def setup_page_config():
     st.set_page_config(
-        page_title="RAG Document",
+        page_title="RAG Document System",
         page_icon="📚",
         layout="centered",
         initial_sidebar_state="collapsed",
