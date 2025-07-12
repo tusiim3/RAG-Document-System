@@ -27,7 +27,7 @@ def render_clear_chat_button():
         st.rerun()
 
 def render_document_stats(stats: dict):
-     if not stats:
+    if not stats:
         return
     
     st.sidebar.success(f"✅ Document processed successfully! ({stats.get('total_chunks', 0)} chunks created)")

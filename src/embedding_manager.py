@@ -6,19 +6,15 @@ from langchain_core.documents import Document
 logger = logging.getLogger(__name__)
 
 class EmbeddingManager:
-    def __init__(self, model_name: str = "text-embedding-3-small", device: str = 'cpu'):
+    def __init__(self, model_name: str = "text-embedding-3-small"):
         self.model_name = model_name
-        self.device = device
         self.embeddings = None
         self._initialize_embeddings()
         
     def _initialize_embeddings(self):
         try:
             logger.info(f"Initializing embedding model: {self.model_name}")
-            self.embeddings = OpenAIEmbeddings(
-                model_name=self.model_name,
-                model_kwargs={'device': self.device}  # whats kwargs?   whats async?
-            )
+            self.embeddings = OpenAIEmbeddings(model=self.model_name)
             logger.info("Embedding model initialized successfully") 
 
         except Exception as e:
@@ -41,7 +37,7 @@ class EmbeddingManager:
             logger.error(f"Error generating embeddings: {e}")
             raise e
         
-    def generate_single_embedding(Self, text: str) -> List[float]:
+    def generate_single_embedding(self, text: str) -> List[float]:
         try:
             embedding = self.embeddings.embed_query(text)
             return embedding
@@ -62,7 +58,6 @@ class EmbeddingManager:
     def get_model_info(self) -> dict:
         return {
             'model_name': self.model_name,
-            'device': self.device,
             'dimension': self.get_embedding_dimension(),
             'is_initialized': self.embeddings is not None
         } 

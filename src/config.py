@@ -11,7 +11,6 @@ class Config:
 
     # Embedding Model
     DEFAULT_EMBEDDING_MODEL = 'text-embedding-3-small' # which other ones are there?
-    DEFAULT_DEVICE = 'cpu' # why?
 
     # Vector Store
     DEFAULT_PERSIST_DIRECTORY = "./chroma_db"
@@ -37,7 +36,6 @@ class Config:
     def get_embedding_config(cls) -> Dict[str, Any]:
         return {
             'model_name': os.getenv('EMBEDDING_MODEL', cls.DEFAULT_EMBEDDING_MODEL),
-            'device': os.getenv('EMBEDDING_DEVICE', cls.DEFAULT_DEVICE)
         }
     
     @classmethod

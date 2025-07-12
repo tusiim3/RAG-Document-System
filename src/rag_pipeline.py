@@ -1,12 +1,16 @@
 import logging
 import os
 from typing import List, Optional, Tuple
+from dotenv import load_dotenv
 from langchain_openai import ChatOpenAI
 from langchain.chains import RetrievalQA
 from langchain_core.documents import Document
 
 from .document_processor import DocumentProcessor
 from .embedding_manager import EmbeddingManager
+from .vector_store import VectorStoreManager
+
+load_dotenv()
 
 logger = logging.getLogger(__name__)
 
@@ -36,6 +40,7 @@ class RAGPipeline:
             self.document_processor = DocumentProcessor(chunk_size=self.chunk_size, chunk_overlap=self.chunk_overlap)
             self.embedding_manager = EmbeddingManager(model_name=self.embedding_model)
             self.vector_store_manager = VectorStoreManager(persist_directory=self.persist_directory, embedding_function=self.embedding_manager.get_embeddings())
+            self.vector_store_manager.initialize_vector_store()
             self.llm = ChatOpenAI(temperature=self.temperature, api_key=self.api_key)
 
             logger.info("RAG Pipeline components initialized successfully") 
@@ -52,8 +57,6 @@ class RAGPipeline:
             if not chunks:
                 logger.error("No chunks generated from document")
                 return False
-            # Initialize vector store
-            self.vector_store_manager.initialize_vector_store(embedding_function=self.embedding_manager.get_embeddings()) 
             # Add chunks to vector store
             success = self.vector_store_manager.add_documents(chunks)
             if not success:
