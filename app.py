@@ -8,11 +8,10 @@ import uuid
 # UI Components moved to src/ui_components.py for easier debugging and maintenance
 
 from src.ui_components import (
-    setup_page_config, #load_custom_css,
-    render_header, #render_api_key_check, 
+    setup_page_config, load_custom_css, render_header, 
     render_document_upload, render_clear_chat_button,
-    render_document_stats, render_getting_started, render_chat_interface,
-    render_chat_history, # render_system_info, 
+    render_document_stats, render_getting_started, 
+    render_chat_interface, render_chat_history, render_system_info, 
     render_processing_spinner
 )
 from src.rag_pipeline import RAGPipeline
@@ -122,8 +121,15 @@ def clear_all_documents():
     st.session_state.document_stats = None
     st.session_state.rag_pipeline = None
     st.session_state.uploaded_files = []
-    # Clear the file uploader by setting it to None
-    st.session_state.rag_docs = None
+
+    # Clear the vector store as well
+    if st.session_state.rag_pipeline and st.session_state.rag_pipeline.vector_store_manager:
+        st.session_state.rag_pipeline.vector_store_manager.clear_vector_store()
+    
+    # Increment uploader key to reset file uploader
+    if 'uploader_key' not in st.session_state:
+        st.session_state.uploader_key = 0
+    st.session_state.uploader_key += 1
     st.rerun()
 
 def process_uploaded_files():
@@ -156,7 +162,7 @@ def process_uploaded_files():
 def main():
     # Setup page configuration and styling
     setup_page_config()
-    # load_custom_css()
+    load_custom_css()
     
     # Initialize session state
     initialize_session_state()
@@ -164,19 +170,30 @@ def main():
     # Render main header
     render_header()
 
+    # Add getting started section
+    if not st.session_state.document_loaded:
+        render_getting_started()
+
     # Clear buttons
     col1, col2 = st.columns(2)
     with col1:
-        st.button("Clear Chat", on_click=lambda: st.session_state.messages.clear(), type="primary")
+        if st.button("Clear Chat", type="primary"):
+            st.session_state.messages.clear()
+            st.rerun()
     with col2:
-        st.button("Clear All Documents", on_click=lambda: clear_all_documents(), type="secondary")
+        if st.button("Clear All Documents", type="secondary"):
+            clear_all_documents()
+
+    # Initialize uploader key
+    if 'uploader_key' not in st.session_state:
+        st.session_state.uploader_key = 0
     
-    # File upload input for RAG with documents
+    # File upload input 
     uploaded_files = st.file_uploader(
         "📄 Upload a text document (.txt only, max 200MB)", 
         type=["txt"],
         accept_multiple_files=True,
-        key="rag_docs",
+       key=f"rag_docs_{st.session_state.uploader_key}"
     )
     
     # Store uploaded files in session state and process them
@@ -237,7 +254,7 @@ def main():
     # System information
     if st.session_state.rag_pipeline:
         system_info = st.session_state.rag_pipeline.get_system_info()
-        #render_system_info(system_info)
+        render_system_info(system_info)
 
 
 if __name__ == "__main__":

@@ -6,15 +6,29 @@ def setup_page_config():
     st.set_page_config(
         page_title="RAG Document System",
         page_icon="📚",
-        layout="centered",
-        initial_sidebar_state="collapsed",
+        layout="centered"
     )
 
+def load_custom_css():
+    st.markdown("""
+    <style>
+        .info-box {
+            background-color: #f0f2f6;
+            color: #000; 
+            padding: 0.5rem;
+            margin: 0.5rem;
+            border-radius: 0.5rem;
+            border-left: 4px solid #1f77b4;
+        }
+    </style>
+    """, unsafe_allow_html=True)
+
 def render_header():
-    st.sidebar.markdown('<h3 class="sub-header">📄 Document Upload</h3>', unsafe_allow_html=True)
+    st.markdown('<h1 class="main-header">📚 RAG Document System</h1>', unsafe_allow_html=True)
+    st.markdown('<h2 class="sub-header">Upload and interact with your documents</h2>', unsafe_allow_html=True)
 
 def render_document_upload():
-    uploaded_file = st.sidebar.file_uploader(
+    uploaded_file = st.file_uploader(
         "Choose a text document (.txt)",
         type=['txt'],
         help="Upload a large text document to build the knowledge base"
@@ -22,7 +36,7 @@ def render_document_upload():
     return uploaded_file
 
 def render_clear_chat_button():
-    if st.sidebar.button("🗑️ Clear Chat History"):
+    if st.button("🗑️ Clear Chat History"):
         st.session_state.messages = []
         st.rerun()
 
@@ -30,25 +44,36 @@ def render_document_stats(stats: dict):
     if not stats:
         return
     
-    st.sidebar.success(f"✅ Document processed successfully! ({stats.get('total_chunks', 0)} chunks created)")
-
+    st.markdown('<div class="success-box">✅ Document processed successfully!</div>', unsafe_allow_html=True)
+    
     # Display detailed statistics
-    with st.sidebar.expander("📊 Document Statistics"):
-        col1, col2 = st.columns(2)
-        
-        with col1:
-            st.metric("Chunks", stats.get('total_chunks', 0))
-            st.metric("Characters", f"{stats.get('total_characters', 0):,}")
-        
-        with col2:
-            st.metric("Avg Chunk Size", f"{stats.get('avg_chunk_size', 0):.0f}")
-            st.metric("Max Chunk Size", stats.get('max_chunk_size', 0))
+    with st.expander("📊 Document Statistics"):
+        st.markdown(f"""
+        <div class="stats-container">
+            <div class="stat-item">
+                <strong>Chunks</strong><br>
+                {stats.get('total_chunks', 0)}
+            </div>
+            <div class="stat-item">
+                <strong>Characters</strong><br>
+                {stats.get('total_characters', 0):,}
+            </div>
+            <div class="stat-item">
+                <strong>Avg Size</strong><br>
+                {stats.get('avg_chunk_size', 0):.0f}
+            </div>
+            <div class="stat-item">
+                <strong>Max Size</strong><br>
+                {stats.get('max_chunk_size', 0)}
+            </div>
+        </div>
+        """, unsafe_allow_html=True)
 
 def render_getting_started():
     st.markdown("""
     <div class="info-box">
         <h4>Getting Started</h4>
-        <p>1. Upload a text document (.txt) using the sidebar</p>
+        <p>1. Upload a text document (.txt) using the file uploader above</p>
         <p>2. Wait for the document to be processed</p>
         <p>3. Start asking questions about your document!</p>
     </div>
@@ -77,7 +102,48 @@ def render_chat_history(chat_history: List[dict]):
                             st.markdown(f'<div class="source-document">{doc.page_content[:300]}{"..." if len(doc.page_content) > 300 else ""}</div>', unsafe_allow_html=True)
                             st.divider()
 
-# def render_system_info(system_info: dict):
+def render_system_info(system_info: dict):
+    """Render system information"""
+    with st.expander("🔧 System Information"):
+        if not system_info:
+            st.info("System information not available")
+            return
+        
+        # Basic configuration
+        st.markdown("**Configuration:**")
+        col1, col2 = st.columns(2)
+        
+        with col1:
+            st.write(f"• Chunk Size: {system_info.get('chunk_size', 'N/A')}")
+            st.write(f"• Chunk Overlap: {system_info.get('chunk_overlap', 'N/A')}")
+            st.write(f"• Temperature: {system_info.get('temperature', 'N/A')}")
+        
+        with col2:
+            st.write(f"• Embedding Model: {system_info.get('embedding_model', 'N/A')}")
+            st.write(f"• Persist Directory: {system_info.get('persist_directory', 'N/A')}")
+        
+        # Component status
+        st.markdown("**Component Status:**")
+        components = system_info.get('components_initialized', {})
+        for component, status in components.items():
+            status_icon = "✅" if status else "❌"
+            st.write(f"{status_icon} {component.replace('_', ' ').title()}")
+        
+        # Embedding info
+        if 'embedding_info' in system_info:
+            st.markdown("**Embedding Model Info:**")
+            embedding_info = system_info['embedding_info']
+            st.write(f"• Model: {embedding_info.get('model_name', 'N/A')}")
+            st.write(f"• Device: {embedding_info.get('device', 'N/A')}")
+            st.write(f"• Dimensions: {embedding_info.get('dimension', 'N/A')}")
+        
+        # Vector store stats
+        if 'vector_store_stats' in system_info:
+            st.markdown("**Vector Store Stats:**")
+            vector_stats = system_info['vector_store_stats']
+            st.write(f"• Total Documents: {vector_stats.get('total_documents', 0)}")
+            st.write(f"• Collection: {vector_stats.get('collection_name', 'N/A')}")
+
 
 def render_error_message(message:  str):
     st.error(f"❌ {message}")
