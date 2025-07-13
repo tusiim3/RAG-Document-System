@@ -16,8 +16,8 @@ A simple document interaction system using Retrieval-Augmented Generation (RAG) 
 
 1. Clone the repository:
 ```bash
-git clone https://github.com/yourusername/Large-Document-Interaction-RAG-System.git
-cd Large-Document-Interaction-RAG-System
+git clone https://github.com/tusiim3/RAG-Document-System.git
+cd RAG-Document-System
 ```
 
 2. Copy `.env.example` to `.env` and add your Google API key:
@@ -36,8 +36,8 @@ docker-compose up --build
 
 1. Clone the repository:
 ```bash
-git clone https://github.com/yourusername/Large-Document-Interaction-RAG-System.git
-cd Large-Document-Interaction-RAG-System
+git clone https://github.com/tusiim3/RAG-Document-System.git
+cd RAG-Document-System
 ```
 
 2. Install dependencies:
