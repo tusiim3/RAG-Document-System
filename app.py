@@ -9,9 +9,7 @@ import uuid
 
 from src.ui_components import (
     setup_page_config, load_custom_css, render_header, 
-    render_document_upload, render_clear_chat_button,
-    render_document_stats, render_getting_started, 
-    render_chat_interface, render_chat_history, render_system_info, 
+    render_getting_started, render_system_info, 
     render_processing_spinner
 )
 from src.rag_pipeline import RAGPipeline
