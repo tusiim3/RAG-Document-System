@@ -10,21 +10,21 @@ class Config:
     DEFAULT_ENCODING = 'utf-8'
 
     # Embedding Model
-    DEFAULT_EMBEDDING_MODEL = 'sentence-transformers/all-MiniLM-L6-v2' # which other ones are there?
+    DEFAULT_EMBEDDING_MODEL = 'sentence-transformers/all-MiniLM-L6-v2' 
 
     # Vector Store
     DEFAULT_PERSIST_DIRECTORY = "./chroma_db"
-    DEFAULT_RETRIEVAL_K = 5 #WHATS THIS?
+    DEFAULT_RETRIEVAL_K = 5 
 
     # LLM Settings
-    DEFAULT_TEMPERATURE = 0.3 #whats the optimal for a rag
-    DEFAULT_CHAIN_TYPE = "stuff" # what is this?
+    DEFAULT_TEMPERATURE = 0.3 
+    DEFAULT_CHAIN_TYPE = "stuff" 
 
     #File Settings
     SUPPORTED_FILE_TYPES = ["txt"]
     MAX_FILE_SIZE_MB = 100
 
-    @classmethod # what does a class method do?
+    @classmethod 
     def get_doc_processing_config(cls) -> Dict[str, Any]:
         return {
             'chunk_size': int(os.getenv('CHUNK_SIZE', cls.DEFAULT_CHUNK_SIZE)),
@@ -71,7 +71,7 @@ class Config:
         }
     
     @classmethod
-    def validate_config(cls) -> bool: #why a boolean?
+    def validate_config(cls) -> bool:
         llm_config = cls.get_llm_config()
 
         if not llm_config['api_key']:
@@ -80,7 +80,7 @@ class Config:
         return True
     
     @classmethod
-    def get_environment_info(cls) -> Dict[str, Any]:   # why does this matter? could i have done some diff to avoid this?
+    def get_environment_info(cls) -> Dict[str, Any]: 
         return {
             'python_version': sys.version,
             'environment_variables': {
